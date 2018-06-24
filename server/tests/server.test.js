@@ -4,22 +4,10 @@ const {ObjectID} = require('mongodb');
 
 const {app} = require('./../server.js');
 const {Todo} = require('./../db/todo.js');
+const {todos, populateTodos, users, populateUser} = require('./seed/seed');
 
-const todos = [{
-	_id: new ObjectID(),
-	text: 'First test todo'
-}, {
-	_id: new ObjectID(),
-	text: 'Second test todo',
-	completed: true,
-	completedAt: 333
-}];
-
-beforeEach((done) => {
-	Todo.remove({}).then(() => {
-		return Todo.insertMany(todos);
-	}).then(() => done());
-});
+beforeEach(populateUser);
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
 	it('should create new todo', (done) => {
@@ -177,3 +165,16 @@ describe('Patch /todos/:id', () => {
 
 	});
 });
+
+// describe('GET /user/me', () => {
+// 	it('should return user if authenticated', (done) => {
+// 		request(app)
+// 		.get('/users/me')
+// 		.set('x-auth', users[0].tokens[0].token)
+// 		.expect(200)
+// 		.end(done);
+// 	})
+//
+// 	it('should return 401 if not authenticated', (done) => {
+// 	})
+// })
